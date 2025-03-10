@@ -15,8 +15,17 @@ services:
       start_period: 60s
     volumes:
       - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+
+  adminer:
+      image: adminer:latest
+      depends_on:
+        - database
+      environment:
+        APP_ENV: dev
+        ADMINER_DESIGN: pepa-linha
+        ADMINER_DEFAULT_SERVER: database
+      ports:
+        - "8082:8080"
 ###< doctrine/doctrine-bundle ###
 
 volumes:
