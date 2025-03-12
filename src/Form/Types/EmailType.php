@@ -30,6 +30,14 @@ final class EmailType extends AbstractType implements DataMapperInterface
         ])->setDataMapper($this);
     }
 
+    /**
+     * @see https://github.com/symfony/symfony/issues/59950
+     */
+    public function getBlockPrefix(): string
+    {
+        return '';
+    }
+
     public function configureOptions(OptionsResolver $resolver): OptionsResolver
     {
         parent::configureOptions($resolver);
