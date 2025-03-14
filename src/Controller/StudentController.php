@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\StudentModel;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
@@ -25,11 +26,17 @@ final class StudentController extends AbstractController
     #[Route('/new', name: 'app_student_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $student = new Student();
-        $form = $this->createForm(StudentType::class, $student);
+        $model = new StudentModel();
+        $form = $this->createForm(StudentType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $student = new Student(
+                $model->email,
+                $model->username,
+                $model->address,
+                $model->birthdate
+            );
             $entityManager->persist($student);
             $entityManager->flush();
 
@@ -37,7 +44,7 @@ final class StudentController extends AbstractController
         }
 
         return $this->render('student/new.html.twig', [
-            'student' => $student,
+            'student' => $model,
             'form' => $form,
         ]);
     }
@@ -53,10 +60,17 @@ final class StudentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_student_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Student $student, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(StudentType::class, $student);
+        $model = StudentModel::createFromEntity($student);
+        $form = $this->createForm(StudentType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $student->updateProfile(
+                $model->email,
+                $model->username,
+                $model->address,
+                $model->birthdate
+            );
             $entityManager->flush();
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);

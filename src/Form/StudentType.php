@@ -2,11 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Student;
+use App\DTO\StudentModel;
 use App\Form\Types\AddressType;
 use App\Form\Types\EmailType;
 use App\Form\Types\UsernameType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +19,7 @@ class StudentType extends AbstractType
             ->add('email', EmailType::class)
             ->add('username', UsernameType::class)
             ->add('address', AddressType::class)
-            ->add('birthdate', null, [
+            ->add('birthdate', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
         ;
@@ -27,7 +28,7 @@ class StudentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Student::class,
+            'data_class' => StudentModel::class,
         ]);
     }
 }

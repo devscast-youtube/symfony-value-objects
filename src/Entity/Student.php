@@ -16,46 +16,27 @@ class Student
     #[ORM\Column]
     private(set) ?int $id = null;
 
-    #[ORM\Embedded(class: Email::class)]
-    private(set) ?Email $email = null;
-
-    #[ORM\Embedded(class: Username::class)]
-    private(set) ?Username $username = null;
-
-    #[ORM\Embedded(class: Address::class, columnPrefix: false)]
-    private(set) Address $address;
-
-    #[ORM\Column]
-    private(set) ?\DateTimeImmutable $birthdate = null;
-
-    public function __construct()
-    {
-        $this->address = new Address();
+    public function __construct(
+        #[ORM\Embedded(class: Email::class)]
+        private(set) Email $email,
+        #[ORM\Embedded(class: Username::class)]
+        private(set) Username $username,
+        #[ORM\Embedded(class: Address::class, columnPrefix: false)]
+        private(set) Address $address,
+        #[ORM\Column]
+        private(set) \DateTimeImmutable $birthdate,
+    ) {
     }
 
-    public function setEmail(string $email): static
-    {
-        $this->email = new Email($email);
-
-        return $this;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = new Username($username);
-
-        return $this;
-    }
-
-    public function setAddress(Address $address): static
-    {
+    public function updateProfile(
+        Email $email,
+        Username $username,
+        Address $address,
+        \DateTimeImmutable $birthdate
+    ): self {
+        $this->email = $email;
+        $this->username = $username;
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function setBirthdate(\DateTimeImmutable $birthdate): static
-    {
         $this->birthdate = $birthdate;
 
         return $this;
