@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 #[Embeddable]
 final readonly class Email implements \Stringable
 {
-    #[Column(type: "string")]
+    #[Column(type: 'string')]
     public string $value;
 
     public function __construct(string $value)
@@ -31,5 +31,10 @@ final readonly class Email implements \Stringable
     public function __toString(): string
     {
         return $this->value;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->value === $other->value;
     }
 }

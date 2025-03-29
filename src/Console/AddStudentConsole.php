@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Command;
+namespace App\Console;
 
-use App\Entity\ValueObject\Address;
+use App\Bus\CommandBus;
 use App\Entity\ValueObject\Email;
+use App\Entity\ValueObject\Factory\AddressFactory;
 use App\Entity\ValueObject\Username;
-use App\Factory\AddressFactory;
-use App\Message\AddStudent;
-use App\MessageBus;
+use App\UseCase\Command\AddStudent;
+use DateTimeImmutable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,17 +15,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Throwable;
 
 #[AsCommand(
     name: 'app:add-student',
-    description: 'Add a short description for your command',
+    description: 'Add a student',
 )]
-class AddStudentCommand extends Command
+class AddStudentConsole extends Command
 {
     public function __construct(
         private readonly AddressFactory $addressFactory,
-        private readonly MessageBus $messageBus
+        private readonly CommandBus $commandBus
     ) {
         parent::__construct();
     }
@@ -39,8 +39,7 @@ class AddStudentCommand extends Command
             ->addOption('city', null, InputOption::VALUE_REQUIRED, 'Option description')
             ->addOption('country', null, InputOption::VALUE_REQUIRED, 'Option description')
             ->addOption('line1', null, InputOption::VALUE_REQUIRED, 'Option description')
-            ->addOption('line2', null, InputOption::VALUE_REQUIRED, 'Option description')
-        ;
+            ->addOption('line2', null, InputOption::VALUE_REQUIRED, 'Option description');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,21 +49,21 @@ class AddStudentCommand extends Command
         try {
             $email = new Email($input->getArgument('email'));
             $username = new Username($input->getArgument('username'));
-            $birthdate = new \DateTimeImmutable($input->getArgument('birthdate'));
+            $birthdate = new DateTimeImmutable($input->getArgument('birthdate'));
             $address = $this->addressFactory->create(
                 $input->getOption('city'),
                 $input->getOption('country'),
                 $input->getOption('line1'),
                 $input->getOption('line2')
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $io->error($e->getMessage());
 
             return Command::FAILURE;
         }
 
         try {
-            $this->messageBus->dispatch(new AddStudent(
+            $this->commandBus->handle(new AddStudent(
                 $email,
                 $username,
                 $address,
@@ -76,8 +75,7 @@ class AddStudentCommand extends Command
             return Command::FAILURE;
         }
 
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Student added');
 
         return Command::SUCCESS;
     }

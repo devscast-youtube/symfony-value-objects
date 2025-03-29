@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Types;
 
 use App\Entity\ValueObject\Address;
-use App\Factory\AddressFactory;
+use App\Entity\ValueObject\Factory\AddressFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -34,7 +34,7 @@ final class AddressType extends AbstractType implements DataMapperInterface
             ->add('country', CountryType::class)
             ->add('addressLine1', TextType::class)
             ->add('addressLine2', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->setDataMapper($this);
     }

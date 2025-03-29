@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
+use App\Entity\ValueObject\Age;
+
 /**
  * Class CannotRegisterUnderage.
  *
@@ -11,8 +13,8 @@ namespace App\Exception;
  */
 final class CannotRegisterUnderage extends \DomainException
 {
-    public static function with(int $age): self
+    public static function with(Age $age): self
     {
-        return new self(sprintf('Cannot register underage student, age %d is not allowed', $age));
+        return new self(sprintf('Cannot register underage student, age %d is not allowed', $age->value));
     }
 }

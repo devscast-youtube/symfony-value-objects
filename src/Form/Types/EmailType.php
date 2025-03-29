@@ -22,16 +22,17 @@ final class EmailType extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('email', SymfonyEmailType::class, [
-            'label' => "email",
+            'label' => 'email',
             'attr' => [
-                'placeholder' => 'exemple bernard@devscast.tech'
-            ]
+                'placeholder' => 'exemple bernard@devscast.tech',
+            ],
         ])->setDataMapper($this);
     }
 
     /**
      * @see https://github.com/symfony/symfony/issues/59950
      */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return '';
@@ -42,7 +43,7 @@ final class EmailType extends AbstractType implements DataMapperInterface
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'data_class' => Email::class,
-            'empty_data' => null
+            'empty_data' => null,
         ]);
 
         return $resolver;

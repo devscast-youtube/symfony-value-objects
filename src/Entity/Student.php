@@ -33,12 +33,10 @@ class Student
         Username $username,
         Address $address,
         \DateTimeImmutable $birthdate
-    ): self {
+    ): void {
         $this->email = $email;
         $this->username = $username;
         $this->address = $address;
         $this->birthdate = $birthdate;
-
-        return $this;
     }
 }

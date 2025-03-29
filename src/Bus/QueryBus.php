@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Bus;
 
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class MessageBus
+final class QueryBus
 {
     use HandleTrait {
         HandleTrait::handle as messengerHandle;
     }
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $queryBus)
     {
-        $this->messageBus = $messageBus;
+        $this->messageBus = $queryBus;
     }
 
     /**
@@ -34,10 +34,5 @@ final class MessageBus
 
             throw $e;
         }
-    }
-
-    public function dispatch(object $message): void
-    {
-        $this->messageBus->dispatch($message);
     }
 }

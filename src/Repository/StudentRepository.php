@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Student;
-use App\Entity\ValueObject\Email;
-use App\Exception\EmailAlreadyUsed;
+use App\Exception\StudentNotFound;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,12 +17,26 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
-    public function ensureEmailNotUsed(Email $email): void
+    public function add(Student $student): void
     {
-        $student = $this->findOneBy(['email_value' => $email->value]);
+        $this->getEntityManager()->persist($student);
+        $this->getEntityManager()->flush();
+    }
 
-        if ($student !== null) {
-            throw EmailAlreadyUsed::with($email);
+    public function remove(Student $student): void
+    {
+        $this->getEntityManager()->remove($student);
+        $this->getEntityManager()->flush();
+    }
+
+    public function getById(int $studentId): Student
+    {
+        $student = $this->find($studentId);
+
+        if ($student === null) {
+            throw StudentNotFound::withId($studentId);
         }
+
+        return $student;
     }
 }
