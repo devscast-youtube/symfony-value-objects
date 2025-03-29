@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Factory;
+namespace App\Entity\ValueObject\Factory;
 
 use App\Entity\ValueObject\Address;
 use Symfony\Component\Intl\Countries;
@@ -26,7 +26,7 @@ final readonly class AddressFactory
         Assert::notEmpty($addressLine1, 'Address line 1 cannot be empty');
         Assert::nullOrNotEmpty($addressLine2, 'Address line 2 cannot be empty');
 
-        if (!Countries::alpha3CodeExists($country) && !Countries::exists($country)) {
+        if (! Countries::alpha3CodeExists($country) && ! Countries::exists($country)) {
             throw new \InvalidArgumentException('invalid_country');
         }
 

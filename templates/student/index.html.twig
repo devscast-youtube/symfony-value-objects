@@ -20,10 +20,10 @@
             </tr>
         </thead>
         <tbody>
-        {% for student in students %}
+        {% for student in students.items %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.birthdate ? student.birthdate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ student.age }}</td>
                 <td>{{ student.email.value }}</td>
                 <td>{{ student.username.value }}</td>
                 <td>{{ student.address.city }}</td>

@@ -24,8 +24,8 @@ final class UsernameType extends AbstractType implements DataMapperInterface
         $builder->add('username', TextType::class, [
             'label' => "nom d'utilisateur",
             'attr' => [
-                'placeholder' => 'exemple @_bernard.ng_'
-            ]
+                'placeholder' => 'exemple @_bernard.ng_',
+            ],
         ])->setDataMapper($this);
     }
 
@@ -34,7 +34,7 @@ final class UsernameType extends AbstractType implements DataMapperInterface
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'data_class' => Username::class,
-            'empty_data' => null
+            'empty_data' => null,
         ]);
 
         return $resolver;

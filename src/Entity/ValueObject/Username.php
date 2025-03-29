@@ -17,9 +17,10 @@ use Webmozart\Assert\Assert;
 final readonly class Username implements \Stringable
 {
     private const int MIN = 3;
+
     private const int MAX = 20;
 
-    #[Column(type: "string")]
+    #[Column(type: 'string')]
     public string $value;
 
     public function __construct(string $value)

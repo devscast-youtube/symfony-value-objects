@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\DTO;
+namespace App\Form\Model;
 
 use App\Entity\Student;
 use App\Entity\ValueObject\Address;
@@ -21,7 +21,7 @@ final class StudentModel
         public ?Email $email = null,
         public ?Username $username = null,
         public Address $address = new Address(),
-        #[Assert\LessThan("today")]
+        #[Assert\LessThan('today')]
         public ?\DateTimeImmutable $birthdate = null
     ) {
     }
